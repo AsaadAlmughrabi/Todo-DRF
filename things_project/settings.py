@@ -83,13 +83,14 @@ WSGI_APPLICATION = 'things_project.wsgi.application'
 #     }
 # }
 
+# postgres://kenyjkti:eGKFZ8OTF7L9hrFReHCNfo2K6mwXpn96@tyke.db.elephantsql.com/kenyjkti
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
+        'NAME': 'kenyjkti',
+        'USER': 'kenyjkti',
+        'PASSWORD': 'eGKFZ8OTF7L9hrFReHCNfo2K6mwXpn96',
+        'HOST': 'tyke.db.elephantsql.com',
         'PORT':'5432'
     }
 }
