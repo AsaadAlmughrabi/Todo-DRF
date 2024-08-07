@@ -142,3 +142,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ]
 }
+
+ALLOWED_HOSTS = ['todo-drf.onrender.com']
