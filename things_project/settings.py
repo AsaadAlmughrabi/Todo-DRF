@@ -144,3 +144,4 @@ REST_FRAMEWORK = {
 }
 
 ALLOWED_HOSTS = ['todo-drf.onrender.com']
+ALLOWED_HOSTS = ['.vercel.app']
