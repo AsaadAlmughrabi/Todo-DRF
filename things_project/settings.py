@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-d-=-sw031e_)_&tay%1&9#8(dcp7tz+ib0^lxf4mtgeqlrg87l"
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-d-=-sw031e_)_&tay%1&9#8(dcp7tz+ib0^lxf4mtgeqlrg87l')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ["*"]
+# Adjust ALLOWED_HOSTS for production
+ALLOWED_HOSTS = ['todo-drf.onrender.com'] if not DEBUG else ['*']
 
 
 # Application definition
@@ -77,23 +79,14 @@ WSGI_APPLICATION = "things_project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-
-#     }
-# }
-
-# postgres://kenyjkti:eGKFZ8OTF7L9hrFReHCNfo2K6mwXpn96@tyke.db.elephantsql.com/kenyjkti
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "kenyjkti",
-        "USER": "kenyjkti",
-        "PASSWORD": "eGKFZ8OTF7L9hrFReHCNfo2K6mwXpn96",
-        "HOST": "tyke.db.elephantsql.com",
-        "PORT": "5432",
+        "NAME": os.getenv('DB_NAME', 'kenyjkti'),
+        "USER": os.getenv('DB_USER', 'kenyjkti'),
+        "PASSWORD": os.getenv('DB_PASSWORD', 'eGKFZ8OTF7L9hrFReHCNfo2K6mwXpn96'),
+        "HOST": os.getenv('DB_HOST', 'tyke.db.elephantsql.com'),
+        "PORT": os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -129,17 +122,14 @@ USE_I18N = True
 USE_TZ = True
 
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
+
 STATIC_URL = "/static/"
-import os
 
-# This production code might break development mode, so we check whether we're in DEBUG mode
-if not DEBUG:
-    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
-    # and renames the files with unique names for each version to support long-term caching
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage" if not DEBUG else "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -147,11 +137,9 @@ if not DEBUG:
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+# Django REST framework settings
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ]
 }
-
-
-# ALLOWED_HOSTS = ['.vercel.app']
